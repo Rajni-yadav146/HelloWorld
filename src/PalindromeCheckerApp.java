@@ -1,39 +1,41 @@
-// UseCase4PalindromeCheckerApp.java
+// File: UseCase5PalindromeCheckerApp.java
+
 import java.util.Scanner;
+import java.util.Stack;
 
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // Ask user for input
-        System.out.print("Enter a string to check if it's a palindrome: ");
+        System.out.println("Enter a string to check if it's a palindrome:");
         String input = scanner.nextLine();
 
-        // Convert string to char array
-        char[] chars = input.toCharArray();
-
-        // Two-pointer approach
-        boolean isPalindrome = true;
-        int start = 0;
-        int end = chars.length - 1;
-
-        while (start < end) {
-            if (chars[start] != chars[end]) {
-                isPalindrome = false;
-                break;
-            }
-            start++;
-            end--;
-        }
-
-        // Display result
-        if (isPalindrome) {
-            System.out.println("The string \"" + input + "\" is a palindrome.");
+        if (isPalindrome(input)) {
+            System.out.println("The string is a palindrome!");
         } else {
-            System.out.println("The string \"" + input + "\" is NOT a palindrome.");
+            System.out.println("The string is NOT a palindrome.");
         }
 
         scanner.close();
+    }
+
+    public static boolean isPalindrome(String str) {
+        Stack<Character> stack = new Stack<>();
+        str = str.replaceAll("\\s+", "").toLowerCase(); // remove spaces and ignore case
+
+        // Push all characters onto the stack
+        for (char ch : str.toCharArray()) {
+            stack.push(ch);
+        }
+
+        // Pop characters and compare with original
+        for (char ch : str.toCharArray()) {
+            if (ch != stack.pop()) {
+                return false; // mismatch found
+            }
+        }
+
+        return true; // all characters matched
     }
 }
