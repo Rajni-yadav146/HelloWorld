@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import java.util.Scanner;
 
 public class Main {
@@ -11,18 +10,14 @@ public class Main {
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
-        if (checker.checkPalindrome(input)) {
+        boolean result = checker.checkPalindrome(input);
+
+        if (result) {
             System.out.println("It is a Palindrome.");
         } else {
             System.out.println("It is NOT a Palindrome.");
         }
 
         scanner.close();
-=======
-
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello World");
->>>>>>> 737cd848ceecb3ce399b217f281d3e36672f8f91
     }
 }
