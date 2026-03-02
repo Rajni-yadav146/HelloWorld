@@ -1,5 +1,7 @@
-// File: UseCase5PalindromeCheckerApp.java
+// File: UseCase6PalindromeCheckerApp.java
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -11,7 +13,7 @@ public class PalindromeCheckerApp {
         System.out.println("Enter a string to check if it's a palindrome:");
         String input = scanner.nextLine();
 
-        if (isPalindrome(input)) {
+        if (isPalindromeUsingQueueAndStack(input)) {
             System.out.println("The string is a palindrome!");
         } else {
             System.out.println("The string is NOT a palindrome.");
@@ -20,18 +22,22 @@ public class PalindromeCheckerApp {
         scanner.close();
     }
 
-    public static boolean isPalindrome(String str) {
-        Stack<Character> stack = new Stack<>();
-        str = str.replaceAll("\\s+", "").toLowerCase(); // remove spaces and ignore case
+    public static boolean isPalindromeUsingQueueAndStack(String str) {
+        // Preprocess string: ignore spaces and case
+        str = str.replaceAll("\\s+", "").toLowerCase();
 
-        // Push all characters onto the stack
+        Queue<Character> queue = new LinkedList<>();
+        Stack<Character> stack = new Stack<>();
+
+        // Enqueue characters and push to stack
         for (char ch : str.toCharArray()) {
-            stack.push(ch);
+            queue.add(ch);  // FIFO
+            stack.push(ch); // LIFO
         }
 
-        // Pop characters and compare with original
-        for (char ch : str.toCharArray()) {
-            if (ch != stack.pop()) {
+        // Compare dequeued vs popped characters
+        while (!queue.isEmpty()) {
+            if (!queue.remove().equals(stack.pop())) {
                 return false; // mismatch found
             }
         }
