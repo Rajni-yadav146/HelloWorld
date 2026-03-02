@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import java.util.Scanner;
 
 public class Main {
@@ -17,5 +18,11 @@ public class Main {
         }
 
         scanner.close();
+=======
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello World");
+>>>>>>> 737cd848ceecb3ce399b217f281d3e36672f8f91
     }
 }
