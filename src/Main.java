@@ -1,83 +1,35 @@
 import java.util.*;
 
-class Node {
-    char data;
-    Node next;
+public class UseCase9PalindromeCheckerApp {
 
-    Node(char data) {
-        this.data = data;
-        this.next = null;
-    }
-}
+    // Recursive function
+    public static boolean isPalindrome(String str, int start, int end) {
 
-public class UseCase8PalindromeCheckerApp {
-
-    // Reverse linked list
-    public static Node reverse(Node head) {
-        Node prev = null;
-        Node curr = head;
-
-        while (curr != null) {
-            Node next = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = next;
-        }
-        return prev;
-    }
-
-    // Check palindrome
-    public static boolean isPalindrome(Node head) {
-        if (head == null || head.next == null) return true;
-
-        // Step 1: Find middle (fast & slow pointer)
-        Node slow = head;
-        Node fast = head;
-
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
+        // Base condition
+        if (start >= end) {
+            return true;
         }
 
-        // Step 2: Reverse second half
-        Node secondHalf = reverse(slow);
-
-        // Step 3: Compare halves
-        Node firstHalf = head;
-        Node tempSecond = secondHalf;
-
-        while (tempSecond != null) {
-            if (firstHalf.data != tempSecond.data) {
-                return false;
-            }
-            firstHalf = firstHalf.next;
-            tempSecond = tempSecond.next;
+        // Check mismatch
+        if (str.charAt(start) != str.charAt(end)) {
+            return false;
         }
 
-        return true;
+        // Recursive call
+        return isPalindrome(str, start + 1, end - 1);
     }
 
     public static void main(String[] args) {
+
         Scanner sc = new Scanner(System.in);
-
         System.out.print("Enter a string: ");
-        String input = sc.nextLine().replaceAll("\\s+", "").toLowerCase();
+        String input = sc.nextLine();
 
-        // Step 0: Convert string to linked list
-        Node head = null, tail = null;
+        // Normalize input
+        input = input.replaceAll("\\s+", "").toLowerCase();
 
-        for (char ch : input.toCharArray()) {
-            Node newNode = new Node(ch);
-            if (head == null) {
-                head = tail = newNode;
-            } else {
-                tail.next = newNode;
-                tail = newNode;
-            }
-        }
-
-        // Check palindrome
-        boolean result = isPalindrome(head);
+        // Call recursive method
+        boolean result = isPalindrome(input, 0, input.length() - 1);
 
         // Output
         if (result) {
