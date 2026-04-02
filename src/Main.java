@@ -1,42 +1,94 @@
-import java.util.Scanner;
+import java.util.*;
 
-// Service class (Encapsulation)
-class PalindromeChecker {
+// Step 1: Strategy Interface
+interface PalindromeStrategy {
+    boolean check(String input);
+}
 
-    // Public method to check palindrome
-    public boolean checkPalindrome(String input) {
+// Step 2: Stack Strategy Implementation
+class StackStrategy implements PalindromeStrategy {
 
-        // Normalize input (ignore spaces & case)
+    public boolean check(String input) {
         String normalized = input.replaceAll("\\s+", "").toLowerCase();
 
-        int start = 0;
-        int end = normalized.length() - 1;
+        Stack<Character> stack = new Stack<>();
 
-        // Two-pointer logic
-        while (start < end) {
-            if (normalized.charAt(start) != normalized.charAt(end)) {
+        // Push all characters
+        for (char ch : normalized.toCharArray()) {
+            stack.push(ch);
+        }
+
+        // Compare while popping
+        for (char ch : normalized.toCharArray()) {
+            if (ch != stack.pop()) {
                 return false;
             }
-            start++;
-            end--;
         }
 
         return true;
     }
 }
 
-// Main class
-public class UseCase11PalindromeCheckerApp {
+// Step 3: Deque Strategy Implementation
+class DequeStrategy implements PalindromeStrategy {
+
+    public boolean check(String input) {
+        String normalized = input.replaceAll("\\s+", "").toLowerCase();
+
+        Deque<Character> deque = new ArrayDeque<>();
+
+        for (char ch : normalized.toCharArray()) {
+            deque.addLast(ch);
+        }
+
+        while (deque.size() > 1) {
+            if (!deque.removeFirst().equals(deque.removeLast())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+// Step 4: Context Class
+class PalindromeContext {
+    private PalindromeStrategy strategy;
+
+    public void setStrategy(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public boolean execute(String input) {
+        return strategy.check(input);
+    }
+}
+
+// Step 5: Main Class
+public class UseCase12PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        PalindromeChecker checker = new PalindromeChecker();
+        PalindromeContext context = new PalindromeContext();
 
         System.out.print("Enter a string: ");
         String input = sc.nextLine();
 
-        boolean result = checker.checkPalindrome(input);
+        System.out.println("Choose Strategy:");
+        System.out.println("1. Stack");
+        System.out.println("2. Deque");
+
+        int choice = sc.nextInt();
+
+        // Inject strategy dynamically
+        if (choice == 1) {
+            context.setStrategy(new StackStrategy());
+        } else {
+            context.setStrategy(new DequeStrategy());
+        }
+
+        boolean result = context.execute(input);
 
         if (result) {
             System.out.println("Palindrome");
