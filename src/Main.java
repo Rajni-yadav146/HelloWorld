@@ -1,34 +1,44 @@
 import java.util.Scanner;
 
-public class UseCase10PalindromeCheckerApp {
+// Service class (Encapsulation)
+class PalindromeChecker {
 
-    public static void main(String[] args) {
+    // Public method to check palindrome
+    public boolean checkPalindrome(String input) {
 
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("Enter a string: ");
-        String input = sc.nextLine();
-
-        // Step 1: Normalize string
-        // Remove spaces and convert to lowercase
+        // Normalize input (ignore spaces & case)
         String normalized = input.replaceAll("\\s+", "").toLowerCase();
 
-        // Step 2: Check palindrome using two-pointer approach
         int start = 0;
         int end = normalized.length() - 1;
-        boolean isPalindrome = true;
 
+        // Two-pointer logic
         while (start < end) {
             if (normalized.charAt(start) != normalized.charAt(end)) {
-                isPalindrome = false;
-                break;
+                return false;
             }
             start++;
             end--;
         }
 
-        // Step 3: Output result
-        if (isPalindrome) {
+        return true;
+    }
+}
+
+// Main class
+public class UseCase11PalindromeCheckerApp {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        PalindromeChecker checker = new PalindromeChecker();
+
+        System.out.print("Enter a string: ");
+        String input = sc.nextLine();
+
+        boolean result = checker.checkPalindrome(input);
+
+        if (result) {
             System.out.println("Palindrome");
         } else {
             System.out.println("Not a Palindrome");
