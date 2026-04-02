@@ -1,99 +1,92 @@
 import java.util.*;
 
-// Step 1: Strategy Interface
+// Strategy Interface
 interface PalindromeStrategy {
     boolean check(String input);
 }
 
-// Step 2: Stack Strategy Implementation
+// Stack Strategy
 class StackStrategy implements PalindromeStrategy {
-
     public boolean check(String input) {
-        String normalized = input.replaceAll("\\s+", "").toLowerCase();
-
+        String str = input.replaceAll("\\s+", "").toLowerCase();
         Stack<Character> stack = new Stack<>();
 
-        // Push all characters
-        for (char ch : normalized.toCharArray()) {
+        for (char ch : str.toCharArray()) {
             stack.push(ch);
         }
 
-        // Compare while popping
-        for (char ch : normalized.toCharArray()) {
-            if (ch != stack.pop()) {
-                return false;
-            }
+        for (char ch : str.toCharArray()) {
+            if (ch != stack.pop()) return false;
         }
-
         return true;
     }
 }
 
-// Step 3: Deque Strategy Implementation
+// Deque Strategy
 class DequeStrategy implements PalindromeStrategy {
-
     public boolean check(String input) {
-        String normalized = input.replaceAll("\\s+", "").toLowerCase();
-
+        String str = input.replaceAll("\\s+", "").toLowerCase();
         Deque<Character> deque = new ArrayDeque<>();
 
-        for (char ch : normalized.toCharArray()) {
+        for (char ch : str.toCharArray()) {
             deque.addLast(ch);
         }
 
         while (deque.size() > 1) {
-            if (!deque.removeFirst().equals(deque.removeLast())) {
-                return false;
-            }
+            if (!deque.removeFirst().equals(deque.removeLast())) return false;
         }
-
         return true;
     }
 }
 
-// Step 4: Context Class
-class PalindromeContext {
-    private PalindromeStrategy strategy;
+// Recursive Strategy
+class RecursiveStrategy implements PalindromeStrategy {
 
-    public void setStrategy(PalindromeStrategy strategy) {
-        this.strategy = strategy;
+    public boolean check(String input) {
+        String str = input.replaceAll("\\s+", "").toLowerCase();
+        return isPalindrome(str, 0, str.length() - 1);
     }
 
-    public boolean execute(String input) {
-        return strategy.check(input);
+    private boolean isPalindrome(String str, int start, int end) {
+        if (start >= end) return true;
+        if (str.charAt(start) != str.charAt(end)) return false;
+        return isPalindrome(str, start + 1, end - 1);
     }
 }
 
-// Step 5: Main Class
-public class UseCase12PalindromeCheckerApp {
+// Main Class
+public class UseCase13PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        PalindromeContext context = new PalindromeContext();
 
         System.out.print("Enter a string: ");
         String input = sc.nextLine();
 
-        System.out.println("Choose Strategy:");
-        System.out.println("1. Stack");
-        System.out.println("2. Deque");
+        // List of strategies
+        List<PalindromeStrategy> strategies = Arrays.asList(
+                new StackStrategy(),
+                new DequeStrategy(),
+                new RecursiveStrategy()
+        );
 
-        int choice = sc.nextInt();
+        String[] names = {"Stack", "Deque", "Recursive"};
 
-        // Inject strategy dynamically
-        if (choice == 1) {
-            context.setStrategy(new StackStrategy());
-        } else {
-            context.setStrategy(new DequeStrategy());
-        }
+        // Run each strategy & measure time
+        for (int i = 0; i < strategies.size(); i++) {
 
-        boolean result = context.execute(input);
+            long start = System.nanoTime();
 
-        if (result) {
-            System.out.println("Palindrome");
-        } else {
-            System.out.println("Not a Palindrome");
+            boolean result = strategies.get(i).check(input);
+
+            long end = System.nanoTime();
+
+            long time = end - start;
+
+            System.out.println(names[i] + " Result: " + result);
+            System.out.println(names[i] + " Time (ns): " + time);
+            System.out.println("------------------------");
         }
 
         sc.close();
